@@ -15,7 +15,7 @@ app.debug = True
 app.use_reloader = True
 app.config['SECRET_KEY'] = 'hard to guess string from si364'
 ## TODO 364: Create a database in postgresql in the code line below, and fill in your app's database URI. It should be of the format: postgresql://localhost/YOUR_DATABASE_NAME
-
+#completed in command prompt
 ## Your final Postgres database should be your uniqname, plus HW5, e.g. "jczettaHW5" or "maupandeHW5"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:19900241@localhost/wmwatersHW5"
 ## Provided:
@@ -69,7 +69,8 @@ class UpdateButtonForm(FlaskForm):
 
 # TODO 364: Define a form class for updating the priority of a todolist item
 #(HINT: What class activity you have done before is this similar to?)
-class UpdatePriorityForm(FlaskForm):
+class UpdateInfoForm(FlaskForm):
+    updatedPriority = StringField("What is the new priority of this item?", validators = [Required()])
     submit = SubmitField("Update")
 
 # TODO 364: Define a DeleteButtonForm class for use to delete todo items
@@ -149,7 +150,7 @@ def update(item):
     if form.validate():
         item = TodoItem.query.filter_by(id = item).first()
         flash('Updated priority of item: ' + item.description)
-        item.priority = form.newPriority.data
+        item.priority = form.updatedPriority.data
         db.session.commit()
         return redirect(url_for('all_lists'))
     return render_template('update_item.html', form = form)
@@ -163,9 +164,9 @@ def update(item):
 # TODO 364: Complete route to delete a whole ToDoList
 @app.route('/delete/<lst>',methods=["GET","POST"])
 def delete(lst):
-    new_lst = ToDoList.query.filter_by(id = lst).first()
+    new_lst = TodoList.query.filter_by(id = lst).first()
     db.session.delete(new_lst)
-    flash('Deleted list: ' + lst.title)
+    flash('Deleted list: ' + new_lst.title)
     return redirect(url_for('all_lists'))
     # This code should successfully delete the appropriate todolist
     # Should flash a message about what was deleted, e.g. Deleted list <title of list>
