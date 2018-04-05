@@ -166,7 +166,7 @@ def update(item):
 def delete(lst):
     new_lst = TodoList.query.filter_by(id = lst).first()
     db.session.delete(new_lst)
-    flash('Deleted list: ' + new_lst.title)
+    flash('Successfully deleted ' + new_lst.title)
     return redirect(url_for('all_lists'))
     # This code should successfully delete the appropriate todolist
     # Should flash a message about what was deleted, e.g. Deleted list <title of list>
